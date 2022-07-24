@@ -1,1 +1,1 @@
-# JIRA-Steward
+# JIRA Steward
