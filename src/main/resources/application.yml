@@ -1,0 +1,5 @@
+jira:
+  host: ${JIRA_HOST}
+  auth:
+    username: ${JIRA_USERNAME}
+    password: ${JIRA_PASSWORD}
