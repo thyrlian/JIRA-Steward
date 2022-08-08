@@ -3,3 +3,5 @@ jira:
   auth:
     username: ${JIRA_USERNAME}
     password: ${JIRA_PASSWORD}
+
+logging.level.com.basgeekball.jirasteward.client: DEBUG
