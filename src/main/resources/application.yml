@@ -1,5 +1,8 @@
 jira:
   host: ${JIRA_HOST}
+  api:
+    common: /api/2
+    insight: /insight/1.0
   auth:
     username: ${JIRA_USERNAME}
     password: ${JIRA_PASSWORD}
