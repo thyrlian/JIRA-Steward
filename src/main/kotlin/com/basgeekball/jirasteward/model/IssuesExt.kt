@@ -1,17 +1,21 @@
 package com.basgeekball.jirasteward.model
 
-private fun List<Issue>.filterByStatusCategory(statusCategoryName: String): List<Issue> {
-    return this.filter { it.fields?.status?.category?.name.equals(statusCategoryName) }
+import com.basgeekball.jirasteward.model.JiraConstants.STATUS_CATEGORY_KEY_DONE
+import com.basgeekball.jirasteward.model.JiraConstants.STATUS_CATEGORY_KEY_TODO
+import com.basgeekball.jirasteward.model.JiraConstants.STATUS_CATEGORY_KEY_WIP
+
+private fun List<Issue>.filterByStatusCategory(statusCategoryKey: String): List<Issue> {
+    return this.filter { it.fields?.status?.category?.key.equals(statusCategoryKey, ignoreCase = true) }
 }
 
 fun List<Issue>.filterStatusCategoryToDo(): List<Issue> {
-    return this.filterByStatusCategory("To Do")
+    return this.filterByStatusCategory(STATUS_CATEGORY_KEY_TODO)
 }
 
 fun List<Issue>.filterStatusCategoryInProgress(): List<Issue> {
-    return this.filterByStatusCategory("In Progress")
+    return this.filterByStatusCategory(STATUS_CATEGORY_KEY_WIP)
 }
 
 fun List<Issue>.filterStatusCategoryDone(): List<Issue> {
-    return this.filterByStatusCategory("Done")
+    return this.filterByStatusCategory(STATUS_CATEGORY_KEY_DONE)
 }
