@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Project(
-        @JsonProperty("id") val id: Int?,
-        @JsonProperty("self") val link: String?,
-        @JsonProperty("key") val key: String?,
-        @JsonProperty("name") val name: String?
+    @JsonProperty("id") val id: Int?,
+    @JsonProperty("self") val link: String?,
+    @JsonProperty("key") val key: String?,
+    @JsonProperty("name") val name: String?
 )

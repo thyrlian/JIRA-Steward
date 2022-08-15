@@ -1,7 +1,7 @@
 package com.basgeekball.jirasteward.model
 
 private fun List<Issue>.filterByStatusCategory(statusCategoryName: String): List<Issue> {
-    return this.filter { it.fields?.status?.category?.name.equals(statusCategoryName)}
+    return this.filter { it.fields?.status?.category?.name.equals(statusCategoryName) }
 }
 
 fun List<Issue>.filterStatusCategoryToDo(): List<Issue> {

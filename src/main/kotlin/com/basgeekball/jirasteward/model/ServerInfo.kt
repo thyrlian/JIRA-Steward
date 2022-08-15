@@ -12,8 +12,14 @@ data class ServerInfo(
     @JsonProperty("versionNumbers") val versionNumbers: List<Int>?,
     @JsonProperty("deploymentType") val deploymentType: String?,
     @JsonProperty("buildNumber") val buildNumber: Int?,
-    @JsonProperty("buildDate") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") val buildDate: Date?,
-    @JsonProperty("serverTime") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") val serverTime: Date?,
+    @JsonProperty("buildDate") @JsonFormat(
+        shape = JsonFormat.Shape.STRING,
+        pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    ) val buildDate: Date?,
+    @JsonProperty("serverTime") @JsonFormat(
+        shape = JsonFormat.Shape.STRING,
+        pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    ) val serverTime: Date?,
     @JsonProperty("scmInfo") val scmInfo: String?,
     @JsonProperty("serverTitle") val serverTitle: String?
 )
