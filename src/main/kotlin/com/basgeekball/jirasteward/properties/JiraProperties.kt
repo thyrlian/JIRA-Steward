@@ -7,7 +7,8 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "jira")
 data class JiraProperties(
     var host: String,
-    var auth: AuthProperties
+    var auth: AuthProperties,
+    var timezone: String
 )
 
 data class AuthProperties(

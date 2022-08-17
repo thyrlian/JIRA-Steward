@@ -13,11 +13,15 @@ data class Issue(
     @JsonProperty("key") val key: String?,
     @JsonProperty("fields") val fields: Fields?
 ) {
+    companion object {
+        const val TIMEZONE = "UTC"
+    }
+
     fun isDone(): Boolean {
         return fields?.status?.category?.key.equals(STATUS_CATEGORY_KEY_DONE, ignoreCase = true)
     }
 
-    private fun calculateDaysBetweenDates(startDate: Date?, endDate: Date?, timezone: String): Long? {
+    private fun calculateDaysBetweenDates(startDate: Date?, endDate: Date?, timezone: String = TIMEZONE): Long? {
         return if (startDate != null && endDate != null) {
             ChronoUnit.DAYS.between(
                 startDate.toInstant().atZone(ZoneId.of(timezone)).toLocalDate(),
@@ -28,11 +32,11 @@ data class Issue(
         }
     }
 
-    private fun calculateDaysTillToday(date: Date?, timezone: String): Long? {
+    private fun calculateDaysTillToday(date: Date?, timezone: String = TIMEZONE): Long? {
         return calculateDaysBetweenDates(date, Date(), timezone)
     }
 
-    fun leadTime(timezone: String): Long? {
+    fun leadTime(timezone: String = TIMEZONE): Long? {
         return if (isDone()) {
             calculateDaysBetweenDates(fields?.created, fields?.resolved, timezone)
         } else {
@@ -40,11 +44,11 @@ data class Issue(
         }
     }
 
-    fun silentTime(timezone: String): Long? {
+    fun silentTime(timezone: String = TIMEZONE): Long? {
         return calculateDaysTillToday(fields?.updated, timezone)
     }
 
-    fun isClosedIn(year: Int, month: Int, timezone: String): Boolean {
+    fun isClosedIn(year: Int, month: Int, timezone: String = TIMEZONE): Boolean {
         val date = fields?.resolved?.toInstant()?.atZone(ZoneId.of(timezone))?.toLocalDate()
         return date?.year == year && date.month.value == month
     }

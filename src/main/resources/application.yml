@@ -6,5 +6,6 @@ jira:
   auth:
     username: ${JIRA_USERNAME}
     password: ${JIRA_PASSWORD}
+  timezone: ${JIRA_TIMEZONE}
 
 logging.level.com.basgeekball.jirasteward.client: DEBUG
