@@ -174,43 +174,149 @@ internal class JQLBuilderTest {
     }
 
     @Test
-    fun wasIn() {
+    fun wasInZero() {
+        assertFailsWith<EmptyListException>(
+            message = "A list of one or multiple specified values is expected, but you have given an empty list.",
+            block = {
+                builder.wasIn("status")
+            }
+        )
     }
 
     @Test
-    fun wasNotIn() {
+    fun wasInOne() {
+        builder.wasIn("status", "Resolved")
+        assertEquals(mutableListOf("status WAS IN (Resolved)"), getClausesValue())
+    }
+
+    @Test
+    fun wasInMany() {
+        builder.wasIn("status", "Resolved", "Cancelled", "Closed")
+        assertEquals(mutableListOf("status WAS IN (Resolved,Cancelled,Closed)"), getClausesValue())
+    }
+
+    @Test
+    fun wasNotInZero() {
+        assertFailsWith<EmptyListException>(
+            message = "A list of one or multiple specified values is expected, but you have given an empty list.",
+            block = {
+                builder.wasNotIn("status")
+            }
+        )
+    }
+
+    @Test
+    fun wasNotInOne() {
+        builder.wasNotIn("status", "Resolved")
+        assertEquals(mutableListOf("status WAS NOT IN (Resolved)"), getClausesValue())
+    }
+
+    @Test
+    fun wasNotInMany() {
+        builder.wasNotIn("status", "Resolved", "Cancelled", "Closed")
+        assertEquals(mutableListOf("status WAS NOT IN (Resolved,Cancelled,Closed)"), getClausesValue())
     }
 
     @Test
     fun wasNot() {
+        builder.wasNot("status", "In Progress")
+        assertEquals(mutableListOf("status WAS NOT \"In Progress\""), getClausesValue())
     }
 
     @Test
     fun changed() {
+        builder.changed("assignee")
+        assertEquals(mutableListOf("assignee CHANGED"), getClausesValue())
+    }
+
+    @Test
+    fun andWithEmptyClauses() {
+        builder.and()
+        assertTrue(getClausesValue().isEmpty())
+    }
+
+    @Test
+    fun andWithAnotherKeywordNextToIt() {
+        builder.equal("project", "Software").and().and()
+        assertEquals(mutableListOf("project = Software", "AND"), getClausesValue())
     }
 
     @Test
     fun and() {
+        builder.equal("project", "Software").and()
+        assertEquals(mutableListOf("project = Software", "AND"), getClausesValue())
+    }
+
+    @Test
+    fun orWithEmptyClauses() {
+        builder.or()
+        assertTrue(getClausesValue().isEmpty())
+    }
+
+    @Test
+    fun orWithAnotherKeywordNextToIt() {
+        builder.equal("project", "Hardware").and().or()
+        assertEquals(mutableListOf("project = Hardware", "AND"), getClausesValue())
     }
 
     @Test
     fun or() {
+        builder.equal("project", "Hardware").or()
+        assertEquals(mutableListOf("project = Hardware", "OR"), getClausesValue())
     }
 
     @Test
-    fun inProject() {
+    fun inProjectWithEmptyClauses() {
+        builder.inProject("Unicorn")
+        assertEquals(mutableListOf("project = Unicorn"), getClausesValue())
     }
 
     @Test
-    fun withIssueType() {
+    fun inProjectWithExistingClauses() {
+        builder.equal("assignee", "johndoe").inProject("Unicorn")
+        assertEquals(mutableListOf("assignee = johndoe", "AND", "project = Unicorn"), getClausesValue())
     }
 
     @Test
-    fun reportBy() {
+    fun withIssueTypeWithEmptyClauses() {
+        builder.withIssueType("Task")
+        assertEquals(mutableListOf("type = Task"), getClausesValue())
     }
 
     @Test
-    fun assignTo() {
+    fun withIssueTypeWithExistingClauses() {
+        builder.equal("assignee", "johndoe").withIssueType("Task")
+        assertEquals(mutableListOf("assignee = johndoe", "AND", "type = Task"), getClausesValue())
+    }
+
+    @Test
+    fun reportByWithEmptyClauses() {
+        builder.reportBy("lee")
+        assertEquals(mutableListOf("reporter = lee"), getClausesValue())
+    }
+
+    @Test
+    fun reportByWithExistingClauses() {
+        builder.equal("project", "Unicorn").reportBy("lee")
+        assertEquals(mutableListOf("project = Unicorn", "AND", "reporter = lee"), getClausesValue())
+    }
+
+    @Test
+    fun assignToWithEmptyClauses() {
+        builder.assignTo("jenkins")
+        assertEquals(mutableListOf("assignee = jenkins"), getClausesValue())
+    }
+
+    @Test
+    fun assignToWithExistingClauses() {
+        builder.equal("project", "Unicorn").assignTo("jenkins")
+        assertEquals(mutableListOf("project = Unicorn", "AND", "assignee = jenkins"), getClausesValue())
+    }
+
+    @Test
+    fun quoteStringWithSpace() {
+        builder.inEitherOf("status", "Resolved", "In Progress", "Closed")
+        assertEquals(mutableListOf("status in (Resolved,\"In Progress\",Closed)"), getClausesValue())
     }
 
     @Test

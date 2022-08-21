@@ -19,7 +19,7 @@ class JQLBuilder {
         vararg values: String,
         valueInListForm: Boolean = false
     ): JQLBuilder {
-        // use quotation marks around strings that contain white spaces
+        // use quotation marks around strings that contain spaces
         val quotedValues = values.map {
             if (it.contains(" ") && !Regex("^\".*\"$").matches(it)) "\"$it\"" else it
         }
@@ -136,7 +136,7 @@ class JQLBuilder {
     // ================================================================================
     private fun join(keyword: String): JQLBuilder {
         // validate
-        if (clauses.isNotEmpty()) clauses.add(keyword)
+        if (clauses.isNotEmpty() && !JOIN_KEYWORDS.containsValue(clauses.last())) clauses.add(keyword)
         return this
     }
 
