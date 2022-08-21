@@ -1,4 +1,6 @@
-package com.basgeekball.jirasteward.domain.jql
+package com.basgeekball.jirasteward.domain.jql.exception
+
+import com.basgeekball.jirasteward.domain.jql.JQLBuilder
 
 class IllegalClausesJoiningException(
     clauses: MutableList<String>,

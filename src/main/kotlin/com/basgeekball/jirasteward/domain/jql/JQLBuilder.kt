@@ -1,5 +1,8 @@
 package com.basgeekball.jirasteward.domain.jql
 
+import com.basgeekball.jirasteward.domain.jql.exception.EmptyListException
+import com.basgeekball.jirasteward.domain.jql.exception.IllegalClausesJoiningException
+
 class JQLBuilder {
     private var clauses = mutableListOf<String>()
 
@@ -33,6 +36,10 @@ class JQLBuilder {
         return this
     }
 
+    private fun validateList(vararg values: String) {
+        if (values.isEmpty()) throw EmptyListException()
+    }
+
     fun equal(field: String, value: String): JQLBuilder {
         return compare(field, "=", value)
     }
@@ -58,10 +65,12 @@ class JQLBuilder {
     }
 
     fun inEitherOf(field: String, vararg values: String): JQLBuilder {
+        validateList(*values)
         return compare(field, "in", *values, valueInListForm = true)
     }
 
     fun notInAnyOf(field: String, vararg values: String): JQLBuilder {
+        validateList(*values)
         return compare(field, "not in", *values, valueInListForm = true)
     }
 
@@ -74,6 +83,7 @@ class JQLBuilder {
     }
 
     fun containMultipleWords(field: String, vararg values: String): JQLBuilder {
+        validateList(*values)
         return compare(field, "~", "\"${values.joinToString(" ")}\"")
     }
 
@@ -98,10 +108,12 @@ class JQLBuilder {
     }
 
     fun wasIn(field: String, vararg values: String): JQLBuilder {
+        validateList(*values)
         return compare(field, "WAS IN", *values, valueInListForm = true)
     }
 
     fun wasNotIn(field: String, vararg values: String): JQLBuilder {
+        validateList(*values)
         return compare(field, "WAS NOT IN", *values, valueInListForm = true)
     }
 

@@ -1,9 +1,11 @@
 package com.basgeekball.jirasteward.domain.jql
 
+import com.basgeekball.jirasteward.domain.jql.exception.EmptyListException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.reflect.Field
+import kotlin.test.assertFailsWith
 
 internal class JQLBuilderTest {
     private lateinit var builder: JQLBuilder
@@ -29,26 +31,54 @@ internal class JQLBuilderTest {
 
     @Test
     fun notEqual() {
+        builder.notEqual("reporter", "mmustermann")
+        assertEquals(mutableListOf("reporter != mmustermann"), getClausesValue())
     }
 
     @Test
     fun greaterThan() {
+        builder.greaterThan("created", "startOfDay(-0d)")
+        assertEquals(mutableListOf("created > startOfDay(-0d)"), getClausesValue())
     }
 
     @Test
     fun greaterThanOrEqualTo() {
+        builder.greaterThanOrEqualTo("created", "startOfDay(-0d)")
+        assertEquals(mutableListOf("created >= startOfDay(-0d)"), getClausesValue())
     }
 
     @Test
     fun lessThan() {
+        builder.lessThan("created", "startOfDay(-0d)")
+        assertEquals(mutableListOf("created < startOfDay(-0d)"), getClausesValue())
     }
 
     @Test
     fun lessThanOrEqualTo() {
+        builder.lessThanOrEqualTo("created", "startOfDay(-0d)")
+        assertEquals(mutableListOf("created <= startOfDay(-0d)"), getClausesValue())
     }
 
     @Test
-    fun inEitherOf() {
+    fun inEitherOfZero() {
+        assertFailsWith<EmptyListException>(
+            message = "A list of one or multiple specified values is expected, but you have given an empty list.",
+            block = {
+                builder.inEitherOf("project")
+            }
+        )
+    }
+
+    @Test
+    fun inEitherOfOne() {
+        builder.inEitherOf("project", "Software")
+        assertEquals(mutableListOf("project in (Software)"), getClausesValue())
+    }
+
+    @Test
+    fun inEitherOfMany() {
+        builder.inEitherOf("project", "Software", "Hardware", "Business")
+        assertEquals(mutableListOf("project in (Software,Hardware,Business)"), getClausesValue())
     }
 
     @Test
