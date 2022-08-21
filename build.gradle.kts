@@ -16,13 +16,16 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2021.0.3"
+extra["junitVersion"] = "5.8.1"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	testImplementation(kotlin("test"))
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter:${property("junitVersion")}")
 }
 
 dependencyManagement {
