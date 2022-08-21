@@ -3,14 +3,28 @@ package com.basgeekball.jirasteward.domain.jql
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.lang.reflect.Field
 
 internal class JQLBuilderTest {
+    private lateinit var builder: JQLBuilder
+    private lateinit var clausesField: Field
+
     @BeforeEach
     fun setUp() {
+        builder = JQLBuilder()
+        clausesField = JQLBuilder::class.java.getDeclaredField("clauses")
+        clausesField.isAccessible = true
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getClausesValue(): MutableList<String> {
+        return clausesField.get(builder) as MutableList<String>
     }
 
     @Test
     fun equal() {
+        builder.equal("assignee", "johndoe")
+        assertEquals(mutableListOf("assignee = johndoe"), getClausesValue())
     }
 
     @Test
