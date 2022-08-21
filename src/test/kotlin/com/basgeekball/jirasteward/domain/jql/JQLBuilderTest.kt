@@ -82,35 +82,89 @@ internal class JQLBuilderTest {
     }
 
     @Test
-    fun notInAnyOf() {
+    fun notInAnyOfZero() {
+        assertFailsWith<EmptyListException>(
+            message = "A list of one or multiple specified values is expected, but you have given an empty list.",
+            block = {
+                builder.notInAnyOf("project")
+            }
+        )
+    }
+
+    @Test
+    fun notInAnyOfOne() {
+        builder.notInAnyOf("project", "Software")
+        assertEquals(mutableListOf("project not in (Software)"), getClausesValue())
+    }
+
+    @Test
+    fun notInAnyOfMany() {
+        builder.notInAnyOf("project", "Software", "Hardware", "Business")
+        assertEquals(mutableListOf("project not in (Software,Hardware,Business)"), getClausesValue())
     }
 
     @Test
     fun contain() {
+        builder.contain("summary", "foobar")
+        assertEquals(mutableListOf("summary ~ foobar"), getClausesValue())
     }
 
     @Test
     fun containWildcardMatch() {
+        builder.containWildcardMatch("summary", "foobar")
+        assertEquals(mutableListOf("summary ~ \"foobar*\""), getClausesValue())
     }
 
     @Test
-    fun containMultipleWords() {
+    fun containMultipleWordsZero() {
+        assertFailsWith<EmptyListException>(
+            message = "A list of one or multiple specified values is expected, but you have given an empty list.",
+            block = {
+                builder.containMultipleWords("summary")
+            }
+        )
+    }
+
+    @Test
+    fun containMultipleWordsOne() {
+        builder.containMultipleWords("summary", "foobar")
+        assertEquals(mutableListOf("summary ~ \"foobar\""), getClausesValue())
+    }
+
+    @Test
+    fun containMultipleWordsOneWithMany() {
+        builder.containMultipleWords("summary", "foo bar")
+        assertEquals(mutableListOf("summary ~ \"foo bar\""), getClausesValue())
+    }
+
+    @Test
+    fun containMultipleWordsMany() {
+        builder.containMultipleWords("summary", "foo", "bar", "baz")
+        assertEquals(mutableListOf("summary ~ \"foo bar baz\""), getClausesValue())
     }
 
     @Test
     fun containExactPhrase() {
+        builder.containExactPhrase("summary", "foo bar")
+        assertEquals(mutableListOf("summary ~ \"\\\"foo bar\\\"\""), getClausesValue())
     }
 
     @Test
     fun notContain() {
+        builder.notContain("summary", "foobar")
+        assertEquals(mutableListOf("summary !~ foobar"), getClausesValue())
     }
 
     @Test
     fun haveNoValue() {
+        builder.haveNoValue("fixVersion")
+        assertEquals(mutableListOf("fixVersion is empty"), getClausesValue())
     }
 
     @Test
     fun haveAValue() {
+        builder.haveAValue("fixVersion")
+        assertEquals(mutableListOf("fixVersion is not empty"), getClausesValue())
     }
 
     @Test
