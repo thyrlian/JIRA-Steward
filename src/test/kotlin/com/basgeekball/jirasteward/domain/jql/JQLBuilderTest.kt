@@ -321,5 +321,14 @@ internal class JQLBuilderTest {
 
     @Test
     fun build() {
+        val jql = builder
+            .equal("assignee", "lee")
+            .and()
+            .lessThan("created", "startOfDay(-0d)")
+            .or()
+            .inEitherOf("project", "Software", "Hardware", "Business")
+            .assignTo("jenkins")
+            .build()
+        assertEquals("assignee = lee AND created < startOfDay(-0d) OR project in (Software,Hardware,Business) AND assignee = jenkins", jql.jql)
     }
 }
