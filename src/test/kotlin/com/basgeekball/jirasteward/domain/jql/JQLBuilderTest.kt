@@ -169,6 +169,8 @@ internal class JQLBuilderTest {
 
     @Test
     fun was() {
+        builder.was("status", "In Progress")
+        assertEquals(mutableListOf("status WAS \"In Progress\""), getClausesValue())
     }
 
     @Test

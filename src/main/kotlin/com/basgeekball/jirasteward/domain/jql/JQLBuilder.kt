@@ -19,13 +19,17 @@ class JQLBuilder {
         vararg values: String,
         valueInListForm: Boolean = false
     ): JQLBuilder {
+        // use quotation marks around strings that contain white spaces
+        val quotedValues = values.map {
+            if (it.contains(" ") && !Regex("^\".*\"$").matches(it)) "\"$it\"" else it
+        }
         // compose clause
-        val mergedValues = if (values.isEmpty()) {
+        val mergedValues = if (quotedValues.isEmpty()) {
             ""
-        } else if (values.size == 1 && !valueInListForm) {
-            values.first()
+        } else if (quotedValues.size == 1 && !valueInListForm) {
+            quotedValues.first()
         } else {
-            values.joinToString(prefix = "(", postfix = ")", separator = ",")
+            quotedValues.joinToString(prefix = "(", postfix = ")", separator = ",")
         }
         val newClause = "$field $operator" + if (mergedValues.isEmpty()) "" else " $mergedValues"
         // validate
