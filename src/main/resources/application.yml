@@ -2,6 +2,7 @@ jira:
   host: ${JIRA_HOST}
   api:
     standard: /rest/api/2
+    agile: /rest/agile/1.0
     insight: /rest/insight/1.0
   auth:
     username: ${JIRA_USERNAME}
