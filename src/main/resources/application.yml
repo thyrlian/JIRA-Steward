@@ -1,7 +1,7 @@
 jira:
   host: ${JIRA_HOST}
   api:
-    common: /rest/api/2
+    standard: /rest/api/2
     insight: /rest/insight/1.0
   auth:
     username: ${JIRA_USERNAME}
