@@ -3,13 +3,14 @@ package com.basgeekball.jirasteward.client
 import com.basgeekball.jirasteward.domain.jql.JQL
 import com.basgeekball.jirasteward.model.*
 import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.*
 
 @FeignClient(value = "jira", configuration = [FeignClientConfiguration::class], url = "\${jira.host}")
 interface JiraClient {
+    companion object {
+        const val MAX_RESULTS = 500
+    }
+
     @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.standard}/serverInfo"])
     fun getServerInfo() : ServerInfo
 
@@ -24,4 +25,7 @@ interface JiraClient {
 
     @RequestMapping(method = [RequestMethod.POST], value = ["\${jira.api.standard}/search"])
     fun getIssues(@RequestBody jql: JQL) : IssueHolder
+
+    @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.agile}/board/{boardId}/sprint"])
+    fun getSprints(@PathVariable("boardId") boardId: Int, @RequestParam(name = "startAt", required = false) startAt: Int = 0, @RequestParam(name = "maxResults", required = false) maxResults: Int = MAX_RESULTS) : SprintHolder
 }
