@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "**" ]
 
+env:
+  JIRA_HOST: https://jira.atlassian.com/
+  JIRA_USERNAME: admin
+  JIRA_PASSWORD: test123
+  JIRA_TIMEZONE: Europe/Berlin
+
 jobs:
   build-gradle-project:
     runs-on: ubuntu-latest
