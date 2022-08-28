@@ -314,6 +314,18 @@ internal class JQLBuilderTest {
     }
 
     @Test
+    fun inSprintWithEmptyClauses() {
+        builder.inSprint("2022CW01")
+        assertEquals(mutableListOf("sprint = 2022CW01"), getClausesValue())
+    }
+
+    @Test
+    fun inSprintWithExistingClauses() {
+        builder.equal("project", "Unicorn").inSprint("2022CW01")
+        assertEquals(mutableListOf("project = Unicorn", "AND", "sprint = 2022CW01"), getClausesValue())
+    }
+
+    @Test
     fun quoteStringWithSpace() {
         builder.inEitherOf("status", "Resolved", "In Progress", "Closed")
         assertEquals(mutableListOf("status in (Resolved,\"In Progress\",Closed)"), getClausesValue())

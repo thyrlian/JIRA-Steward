@@ -167,6 +167,10 @@ class JQLBuilder {
     fun assignTo(user: String): JQLBuilder {
         return and().equal("assignee", user)
     }
+
+    fun inSprint(sprint: String): JQLBuilder {
+        return and().equal("sprint", sprint)
+    }
     // ================================================================================
     //endregion
 
