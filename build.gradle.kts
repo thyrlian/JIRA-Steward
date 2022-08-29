@@ -16,7 +16,7 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2021.0.3"
-extra["junitVersion"] = "5.8.1"
+extra["junitVersion"] = "5.9.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
