@@ -48,8 +48,16 @@ class JQLBuilder {
         return compare(field, "=", value)
     }
 
+    fun equal(field: String, value: Int): JQLBuilder {
+        return equal(field, value.toString())
+    }
+
     fun notEqual(field: String, value: String): JQLBuilder {
         return compare(field, "!=", value)
+    }
+
+    fun notEqual(field: String, value: Int): JQLBuilder {
+        return notEqual(field, value.toString())
     }
 
     fun greaterThan(field: String, value: String): JQLBuilder {
@@ -168,8 +176,12 @@ class JQLBuilder {
         return and().equal("assignee", user)
     }
 
-    fun inSprint(sprint: String): JQLBuilder {
-        return and().equal("sprint", sprint)
+    fun inSprint(sprintId: Int): JQLBuilder {
+        return and().equal("sprint", sprintId)
+    }
+
+    fun inSprint(sprintName: String): JQLBuilder {
+        return and().equal("sprint", sprintName)
     }
     // ================================================================================
     //endregion

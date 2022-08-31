@@ -24,15 +24,27 @@ internal class JQLBuilderTest {
     }
 
     @Test
-    fun equal() {
+    fun equalWithString() {
         builder.equal("assignee", "johndoe")
         assertEquals(mutableListOf("assignee = johndoe"), getClausesValue())
     }
 
     @Test
-    fun notEqual() {
+    fun equalWithInt() {
+        builder.equal("project", 1024)
+        assertEquals(mutableListOf("project = 1024"), getClausesValue())
+    }
+
+    @Test
+    fun notEqualWithString() {
         builder.notEqual("reporter", "mmustermann")
         assertEquals(mutableListOf("reporter != mmustermann"), getClausesValue())
+    }
+
+    @Test
+    fun notEqualWithInt() {
+        builder.notEqual("project", 1024)
+        assertEquals(mutableListOf("project != 1024"), getClausesValue())
     }
 
     @Test
@@ -323,6 +335,18 @@ internal class JQLBuilderTest {
     fun inSprintWithExistingClauses() {
         builder.equal("project", "Unicorn").inSprint("2022CW01")
         assertEquals(mutableListOf("project = Unicorn", "AND", "sprint = 2022CW01"), getClausesValue())
+    }
+
+    @Test
+    fun inSprintById() {
+        builder.inSprint(1024)
+        assertEquals(mutableListOf("sprint = 1024"), getClausesValue())
+    }
+
+    @Test
+    fun inSprintByName() {
+        builder.inSprint("Awesome Sprint 1234")
+        assertEquals(mutableListOf("sprint = \"Awesome Sprint 1234\""), getClausesValue())
     }
 
     @Test
