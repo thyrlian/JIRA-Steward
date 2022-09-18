@@ -302,6 +302,18 @@ internal class JQLBuilderTest {
     }
 
     @Test
+    fun isCompletedWithEmptyClauses() {
+        builder.isCompleted()
+        assertEquals(mutableListOf("statusCategory = done"), getClausesValue())
+    }
+
+    @Test
+    fun isCompletedWithExistingClauses() {
+        builder.inSprint("2022CW01").isCompleted()
+        assertEquals(mutableListOf("sprint = 2022CW01", "AND", "statusCategory = done"), getClausesValue())
+    }
+
+    @Test
     fun reportByWithEmptyClauses() {
         builder.reportBy("lee")
         assertEquals(mutableListOf("reporter = lee"), getClausesValue())

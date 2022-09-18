@@ -168,6 +168,10 @@ class JQLBuilder {
         return and().equal("type", type)
     }
 
+    fun isCompleted(): JQLBuilder {
+        return and().equal("statusCategory", "done")
+    }
+
     fun reportBy(user: String): JQLBuilder {
         return and().equal("reporter", user)
     }
