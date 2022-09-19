@@ -12,6 +12,8 @@ class JiraService {
     @Autowired
     private lateinit var jiraClient: JiraClient
 
+    // There is a known issue with Atlassian's API when pulling sprints from a given board
+    // https://community.atlassian.com/t5/Jira-questions/originBoardId-in-Sprint-does-not-map-back-to-id-in-Board/qaq-p/1461728
     fun getAllSprintsFromBoard(boardId: Int, state: String = ""): List<Sprint> {
         val sprints = mutableListOf<Sprint>()
         var isCompleted = false
@@ -22,6 +24,7 @@ class JiraService {
             if (!isCompleted) startAt = sprintHolder.startAt!! + sprintHolder.maxResults!!
             sprints.addAll(sprintHolder.sprints!!)
         }
+        sprints.retainAll { it.originBoardId == boardId }
         return if (state.isEmpty()) {
             sprints
         } else {
