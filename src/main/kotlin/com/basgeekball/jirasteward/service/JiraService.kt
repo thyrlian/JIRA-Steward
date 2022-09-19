@@ -2,6 +2,7 @@ package com.basgeekball.jirasteward.service
 
 import com.basgeekball.jirasteward.client.JiraClient
 import com.basgeekball.jirasteward.domain.jql.JQL
+import com.basgeekball.jirasteward.domain.jql.JQLBuilder
 import com.basgeekball.jirasteward.model.IssueHolder
 import com.basgeekball.jirasteward.model.Sprint
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,5 +44,17 @@ class JiraService {
 
     fun getIssues(jql: JQL): IssueHolder {
         return jiraClient.getIssues(jql)
+    }
+
+    fun getIssuesFromASprint(sprintId: String): IssueHolder {
+        return getIssues(JQLBuilder().inSprint(sprintId).build())
+    }
+
+    fun getStoriesFromASprint(sprintId: String): IssueHolder {
+        return getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").build())
+    }
+
+    fun getCompletedStoriesFromASprint(sprintId: String): IssueHolder {
+        return getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
     }
 }

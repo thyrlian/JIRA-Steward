@@ -1,6 +1,5 @@
 package com.basgeekball.jirasteward.controller
 
-import com.basgeekball.jirasteward.domain.jql.JQLBuilder
 import com.basgeekball.jirasteward.service.JiraService
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -27,10 +26,18 @@ class JiraController {
         return ResponseEntity.ok(response)
     }
 
+    @GetMapping(value = ["/boards/{boardId}/previous-sprint"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun getPreviousSprint(@PathVariable boardId: Int): ResponseEntity<String> {
+        val sprint = jiraService.getPreviousSprintFromBoard(boardId)
+        val response = mapper.writeValueAsString(sprint)
+        return ResponseEntity.ok(response)
+    }
+
     @GetMapping(value = ["/sprints/{sprintId}/issues"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getIssuesFromASprint(@PathVariable sprintId: String): ResponseEntity<String> {
-        val issues = jiraService.getIssues(JQLBuilder().inSprint(sprintId).build())
+        val issues = jiraService.getIssuesFromASprint(sprintId)
         val response = mapper.writeValueAsString(issues)
         return ResponseEntity.ok(response)
     }
@@ -38,7 +45,7 @@ class JiraController {
     @GetMapping(value = ["/sprints/{sprintId}/stories"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getStoriesFromASprint(@PathVariable sprintId: String): ResponseEntity<String> {
-        val issues = jiraService.getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").build())
+        val issues = jiraService.getStoriesFromASprint(sprintId)
         val response = mapper.writeValueAsString(issues)
         return ResponseEntity.ok(response)
     }
@@ -46,8 +53,7 @@ class JiraController {
     @GetMapping(value = ["/sprints/{sprintId}/completed-stories"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getCompletedStoriesFromASprint(@PathVariable sprintId: String): ResponseEntity<String> {
-        val issues =
-            jiraService.getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
+        val issues = jiraService.getCompletedStoriesFromASprint(sprintId)
         val response = mapper.writeValueAsString(issues)
         return ResponseEntity.ok(response)
     }
