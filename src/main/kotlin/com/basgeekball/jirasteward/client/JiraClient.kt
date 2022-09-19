@@ -33,6 +33,12 @@ interface JiraClient {
         @RequestParam(name = "maxResults", required = false) maxResults: Int = MAX_RESULTS
     ): SprintHolder
 
+    @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.agile}/board/{boardId}/sprint"])
+    fun getActiveSprints(
+        @PathVariable("boardId") boardId: Int,
+        @RequestParam(name = "state", required = true) state: String = "active"
+    ): SprintHolder
+
     @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.agile}/sprint/{sprintId}"])
     fun getASprint(@PathVariable("sprintId") sprintId: Int): Sprint
 

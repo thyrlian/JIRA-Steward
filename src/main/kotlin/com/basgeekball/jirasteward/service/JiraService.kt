@@ -43,7 +43,7 @@ class JiraService {
     }
 
     fun getOngoingSprintFromBoard(boardId: Int): Sprint? {
-        return getAllSprintsFromBoard(boardId, "active").firstOrNull()
+        return jiraClient.getActiveSprints(boardId).sprints?.firstOrNull()
     }
 
     fun getIssues(jql: JQL): IssueHolder {
