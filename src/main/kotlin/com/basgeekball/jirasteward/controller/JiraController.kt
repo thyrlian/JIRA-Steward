@@ -34,6 +34,14 @@ class JiraController {
         return ResponseEntity.ok(response)
     }
 
+    @GetMapping(value = ["/boards/{boardId}/ongoing-sprint"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun getOngoingSprint(@PathVariable boardId: Int): ResponseEntity<String> {
+        val sprint = jiraService.getOngoingSprintFromBoard(boardId)
+        val response = mapper.writeValueAsString(sprint)
+        return ResponseEntity.ok(response)
+    }
+
     @GetMapping(value = ["/sprints/{sprintId}/issues"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getIssuesFromASprint(@PathVariable sprintId: String): ResponseEntity<String> {
