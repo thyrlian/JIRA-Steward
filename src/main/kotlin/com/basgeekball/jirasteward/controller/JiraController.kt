@@ -46,7 +46,8 @@ class JiraController {
     @GetMapping(value = ["/sprints/{sprintId}/completed-stories"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getCompletedStoriesFromASprint(@PathVariable sprintId: String): ResponseEntity<String> {
-        val issues = jiraService.getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
+        val issues =
+            jiraService.getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
         val response = mapper.writeValueAsString(issues)
         return ResponseEntity.ok(response)
     }
