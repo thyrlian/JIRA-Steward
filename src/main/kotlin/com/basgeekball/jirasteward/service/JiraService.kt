@@ -29,6 +29,15 @@ class JiraService {
         }
     }
 
+    fun getPreviousSprintFromBoard(boardId: Int): Sprint? {
+        val sprints = getAllSprintsFromBoard(boardId, "closed")
+        return if (sprints.isEmpty()) {
+            null
+        } else {
+            sprints.sortedBy { it.endDate }.last()
+        }
+    }
+
     fun getIssues(jql: JQL): IssueHolder {
         return jiraClient.getIssues(jql)
     }
