@@ -48,4 +48,7 @@ interface JiraClient {
         @RequestParam(name = "startAt", required = false) startAt: Int = 0,
         @RequestParam(name = "maxResults", required = false) maxResults: Int = MAX_RESULTS
     ): IssueHolder
+
+    @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.insight}/objectschema/list"])
+    fun getObjectSchemaList(): ObjectSchemaHolder
 }
