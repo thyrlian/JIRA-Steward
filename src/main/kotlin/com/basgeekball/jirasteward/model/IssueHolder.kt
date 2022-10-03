@@ -8,5 +8,5 @@ data class IssueHolder(
     @JsonProperty("startAt") val startAt: Int?,
     @JsonProperty("maxResults") val maxResults: Int?,
     @JsonProperty("total") val total: Int?,
-    @JsonProperty("issues") val issues: List<Issue>?
+    @JsonProperty("issues") val issues: List<Issue>
 )

@@ -8,5 +8,5 @@ data class SprintHolder(
     @JsonProperty("maxResults") val maxResults: Int?,
     @JsonProperty("startAt") val startAt: Int?,
     @JsonProperty("isLast") val isLast: Boolean?,
-    @JsonProperty("values") val sprints: List<Sprint>?
+    @JsonProperty("values") val sprints: List<Sprint>
 )
