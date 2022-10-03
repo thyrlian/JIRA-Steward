@@ -54,4 +54,7 @@ interface JiraClient {
 
     @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.insight}/objectschema/{objectSchemaId}"])
     fun getObjectSchema(@PathVariable("objectSchemaId") objectSchemaId: Int): ObjectSchema
+
+    @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.insight}/objectschema/{objectSchemaId}/attributes"])
+    fun getObjectSchemaAttributes(@PathVariable("objectSchemaId") objectSchemaId: Int): List<ObjectTypeAttribute>
 }
