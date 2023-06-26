@@ -195,6 +195,6 @@ class JQLBuilder {
         clauses.forEach {
             query = query.plus(" $it")
         }
-        return JQL(query.trim())
+        return JQL(query.trim(), null, null)
     }
 }
