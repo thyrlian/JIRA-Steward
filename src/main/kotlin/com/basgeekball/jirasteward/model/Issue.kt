@@ -9,16 +9,22 @@ import java.util.*
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Issue(
-    @JsonProperty("id") val id: Int?,
-    @JsonProperty("key") val key: String?,
-    @JsonProperty("fields") val fields: Fields?
+    @JsonProperty("id") val id: Int,
+    @JsonProperty("key") val key: String,
+    @JsonProperty("self") val self: String,
+    @JsonProperty("fields") val fields: Fields
 ) {
     companion object {
         const val TIMEZONE = "UTC"
     }
 
+    fun link(): String {
+        val baseUrl = self.substringBeforeLast("/rest")
+        return "$baseUrl/browse/$key"
+    }
+
     fun isDone(): Boolean {
-        return fields?.status?.category?.key.equals(STATUS_CATEGORY_KEY_DONE, ignoreCase = true)
+        return fields.status.category?.key.equals(STATUS_CATEGORY_KEY_DONE, ignoreCase = true)
     }
 
     private fun calculateDaysBetweenDates(startDate: Date?, endDate: Date?, timezone: String = TIMEZONE): Long? {
@@ -38,18 +44,18 @@ data class Issue(
 
     fun leadTime(timezone: String = TIMEZONE): Long? {
         return if (isDone()) {
-            calculateDaysBetweenDates(fields?.created, fields?.resolved, timezone)
+            calculateDaysBetweenDates(fields.created, fields.resolved, timezone)
         } else {
             null
         }
     }
 
     fun silentTime(timezone: String = TIMEZONE): Long? {
-        return calculateDaysTillToday(fields?.updated, timezone)
+        return calculateDaysTillToday(fields.updated, timezone)
     }
 
     fun isClosedIn(year: Int, month: Int, timezone: String = TIMEZONE): Boolean {
-        val date = fields?.resolved?.toInstant()?.atZone(ZoneId.of(timezone))?.toLocalDate()
+        val date = fields.resolved?.toInstant()?.atZone(ZoneId.of(timezone))?.toLocalDate()
         return date?.year == year && date.month.value == month
     }
 }
