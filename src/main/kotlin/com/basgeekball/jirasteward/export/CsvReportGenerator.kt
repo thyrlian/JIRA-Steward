@@ -8,9 +8,9 @@ class CsvReportGenerator : ReportGenerator {
             return ""
         }
 
-        val header = buildLineWithValues("key", "link", "summary", "issuetype", "project", "status", "created", "resolutiondate")
+        val header = buildLineWithValues("key", "link", "summary", "issuetype", "project", "status", "created", "resolved")
         val rows = issues.joinToString("\n") { issue ->
-            buildLineWithValues(issue.key, issue.link(), issue.fields.summary, issue.fields.type?.name, issue.fields.project?.name, issue.fields.status.name, issue.fields.created, issue.fields.resolved)
+            buildLineWithValues(issue.key, issue.link(), issue.fields.summary, issue.fields.type?.name, issue.fields.project?.name, issue.fields.status.name, issue.fields.createdSimpleFormat, issue.fields.resolvedSimpleFormat)
         }
 
         return "${header}\n${rows}"

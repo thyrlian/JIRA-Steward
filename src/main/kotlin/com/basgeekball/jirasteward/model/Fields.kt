@@ -3,6 +3,7 @@ package com.basgeekball.jirasteward.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.text.SimpleDateFormat
 import java.util.*
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,4 +29,8 @@ data class Fields(
     @JsonProperty("assignee") val assignee: User?,
     @JsonProperty("components") val components: List<Component>?,
     @JsonProperty("fixVersions") val fixVersions: List<Version>?
-)
+) {
+    val createdSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(created)
+    val updatedSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(updated)
+    val resolvedSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(resolved)
+}
