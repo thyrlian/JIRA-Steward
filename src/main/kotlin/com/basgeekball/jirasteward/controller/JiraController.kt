@@ -1,11 +1,12 @@
 package com.basgeekball.jirasteward.controller
 
+import com.basgeekball.jirasteward.domain.jql.JQL
+import com.basgeekball.jirasteward.export.CsvReportGenerator
 import com.basgeekball.jirasteward.service.JiraService
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -64,5 +65,20 @@ class JiraController {
         val issues = jiraService.getCompletedStoriesFromASprint(sprintId)
         val response = mapper.writeValueAsString(issues)
         return ResponseEntity.ok(response)
+    }
+
+    @PostMapping(value = ["/issues/exports/csv"], produces = ["text/csv"])
+    @ResponseBody
+    fun getIssues(@RequestBody jql: String): ResponseEntity<String> {
+        val maxResults = 100
+        val query = JQL(jql, 0, maxResults)
+        val issues = jiraService.getIssues(query).issues!!
+        val csvReportGenerator = CsvReportGenerator()
+        val csv = csvReportGenerator.formatOutput(issues)
+        val filename = "issues.csv"
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_PLAIN
+        headers.contentDisposition = ContentDisposition.builder("attachment").filename(filename).build()
+        return ResponseEntity(csv, headers, HttpStatus.OK)
     }
 }
