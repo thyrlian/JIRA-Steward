@@ -1,5 +1,6 @@
 package com.basgeekball.jirasteward.client
 
+import FieldMetadata
 import com.basgeekball.jirasteward.domain.jql.JQL
 import com.basgeekball.jirasteward.model.*
 import org.springframework.cloud.openfeign.FeignClient
@@ -57,4 +58,7 @@ interface JiraClient {
 
     @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.insight}/objectschema/{objectSchemaId}/attributes"])
     fun getObjectSchemaAttributes(@PathVariable("objectSchemaId") objectSchemaId: Int): List<ObjectTypeAttribute>
+
+    @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.standard}/field"])
+    fun getAllFields(): List<FieldMetadata>
 }

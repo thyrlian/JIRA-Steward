@@ -30,7 +30,7 @@ data class Fields(
     @JsonProperty("components") val components: List<Component>?,
     @JsonProperty("fixVersions") val fixVersions: List<Version>?
 ) {
-    val createdSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(created)
-    val updatedSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(updated)
-    val resolvedSimpleFormat: String = SimpleDateFormat("yyyy-MM-dd").format(resolved)
+    val createdSimpleFormat: String? = created?.let { SimpleDateFormat("yyyy-MM-dd").format(it) }
+    val updatedSimpleFormat: String? = updated?.let { SimpleDateFormat("yyyy-MM-dd").format(it) }
+    val resolvedSimpleFormat: String? = resolved?.let { SimpleDateFormat("yyyy-MM-dd").format(it) }
 }

@@ -1,5 +1,6 @@
 package com.basgeekball.jirasteward.service
 
+import FieldMetadata
 import com.basgeekball.jirasteward.client.JiraClient
 import com.basgeekball.jirasteward.domain.jql.JQL
 import com.basgeekball.jirasteward.domain.jql.JQLBuilder
@@ -12,6 +13,15 @@ import org.springframework.stereotype.Service
 class JiraService {
     @Autowired
     private lateinit var jiraClient: JiraClient
+
+    fun getAllFields(fieldName: String): List<FieldMetadata> {
+        return jiraClient.getAllFields()
+    }
+
+    fun getField(fieldName: String): FieldMetadata? {
+        val fields = jiraClient.getAllFields()
+        return fields.find { it.name == fieldName }
+    }
 
     // There is a known issue with Atlassian's API when pulling sprints from a given board
     // https://community.atlassian.com/t5/Jira-questions/originBoardId-in-Sprint-does-not-map-back-to-id-in-Board/qaq-p/1461728
