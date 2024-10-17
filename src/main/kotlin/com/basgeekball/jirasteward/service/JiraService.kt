@@ -71,16 +71,21 @@ class JiraService {
         return getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
     }
 
-    fun getIssueFieldValue(issueId: String, fieldName: String): IssueWithSpecificField? {
+    fun getIssuesWithFieldValue(issueIds: List<String>, fieldName: String): List<IssueWithSpecificField> {
         val fields = jiraClient.getAllFields()
         val fieldMetadata = fields.find { it.name == fieldName }
-        val fieldId = fieldMetadata?.id ?: return null
-        val issues = jiraClient.getIssueFieldValue("key=$issueId", fieldId)
-        val issue = issues.issues.firstOrNull() ?: return null
-        val specificFieldValue = issue.fields.getSpecificFieldValue(fieldId) ?: return null
-        return IssueWithSpecificField(
-            key = issue.key,
-            fields = QueriedFields(mutableMapOf(fieldId to specificFieldValue))
-        )
+        val fieldId = fieldMetadata?.id ?: return emptyList()
+        
+        val jql = issueIds.joinToString(separator = ",", prefix = "key in (", postfix = ")")
+        val issueHolder = jiraClient.getIssuesWithFieldValue(jql, fieldId)
+        
+        return issueHolder.issues.map { issue ->
+            val specificFieldValue = issue.fields.getSpecificFieldValue(fieldId)
+            val fieldValueMap = specificFieldValue?.let { mapOf("value" to it.value) } ?: emptyMap()
+            IssueWithSpecificField(
+                key = issue.key,
+                fields = QueriedFields(mutableMapOf(fieldId to fieldValueMap))
+            )
+        }
     }
 }
