@@ -4,8 +4,7 @@ import FieldMetadata
 import com.basgeekball.jirasteward.client.JiraClient
 import com.basgeekball.jirasteward.domain.jql.JQL
 import com.basgeekball.jirasteward.domain.jql.JQLBuilder
-import com.basgeekball.jirasteward.model.IssueHolder
-import com.basgeekball.jirasteward.model.Sprint
+import com.basgeekball.jirasteward.model.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -70,5 +69,18 @@ class JiraService {
 
     fun getCompletedStoriesFromASprint(sprintId: String): IssueHolder {
         return getIssues(JQLBuilder().inSprint(sprintId).withIssueType("User Story").isCompleted().build())
+    }
+
+    fun getIssueFieldValue(issueId: String, fieldName: String): IssueWithSpecificField? {
+        val fields = jiraClient.getAllFields()
+        val fieldMetadata = fields.find { it.name == fieldName }
+        val fieldId = fieldMetadata?.id ?: return null
+        val issues = jiraClient.getIssueFieldValue("key=$issueId", fieldId)
+        val issue = issues.issues.firstOrNull() ?: return null
+        val specificFieldValue = issue.fields.getSpecificFieldValue(fieldId) ?: return null
+        return IssueWithSpecificField(
+            key = issue.key,
+            fields = QueriedFields(mutableMapOf(fieldId to specificFieldValue))
+        )
     }
 }

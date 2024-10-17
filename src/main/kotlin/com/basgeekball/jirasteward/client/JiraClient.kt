@@ -61,4 +61,10 @@ interface JiraClient {
 
     @RequestMapping(method = [RequestMethod.GET], value = ["\${jira.api.standard}/field"])
     fun getAllFields(): List<FieldMetadata>
+
+    @GetMapping("\${jira.api.standard}/search")
+    fun getIssueFieldValue(
+        @RequestParam("jql") jql: String,
+        @RequestParam("fields") fields: String
+    ): IssueHolderWithSpecificField
 }
